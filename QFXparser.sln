@@ -7,11 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QFXparser.TestApp", "QFXpar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QFXparser.Core", "QFXparser.Core\QFXparser.Core.csproj", "{F99BA880-DE1C-4D30-BEB3-EB0406E41955}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{1CBE0130-FC43-4673-BAFB-A0A170BF2A4D}"
-	ProjectSection(SolutionItems) = preProject
-		Files\ofx.qbo = Files\ofx.qbo
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
