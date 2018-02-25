@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>emaquest.net</Company>
+    <Product>QFXparser</Product>
+    <PackageId>QFXparser</PackageId>
+    <Authors>Emanuele Ramella-Paia</Authors>
+    <Description>Simple parser for .qfx and .qbo files.</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+</Project>
