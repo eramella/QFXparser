@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QFXparser.Core
+namespace QFXparser
 {
     internal class NodeNameAttribute : Attribute
     {

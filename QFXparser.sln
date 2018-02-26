@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QFXparser.TestApp", "QFXparser.TestApp\QFXparser.TestApp.csproj", "{61168F9D-AEAF-40D4-88D3-A3FBE4102800}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QFXparser.Core", "QFXparser.Core\QFXparser.Core.csproj", "{F99BA880-DE1C-4D30-BEB3-EB0406E41955}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QFXparser", "QFXparser\QFXparser.csproj", "{F99BA880-DE1C-4D30-BEB3-EB0406E41955}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

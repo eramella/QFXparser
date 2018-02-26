@@ -5,15 +5,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace QFXparser.Core
+namespace QFXparser
 {
-    public class StatementBuilder
+    public class QFXparser
     {
-        private Statement _statement;
-        private Transaction _currentTransaction;
+
+        
         private string _fileText;
 
-        public StatementBuilder(string fileNamePath)
+        public QFXparser(string fileNamePath)
         {
             using (StreamReader sr = new StreamReader(fileNamePath))
             {
@@ -22,7 +22,7 @@ namespace QFXparser.Core
 
         }
 
-        public StatementBuilder(Stream fileStream)
+        public QFXparser(Stream fileStream)
         {
             using (StreamReader sr = new StreamReader(fileStream))
             {
@@ -33,8 +33,36 @@ namespace QFXparser.Core
 
         public Statement Build()
         {
+            RawStatement rawStatement = BuildRaw();
 
+            Statement statement = new Statement()
+            {
+                AccountNum = rawStatement.AccountNum
+            };
+
+            foreach (var rawTrans in rawStatement.Transactions)
+            {
+                Transaction trans = new Transaction()
+                {
+                    Amount = rawTrans.Amount,
+                    Memo = rawTrans.Memo,
+                    Name = rawTrans.Name,
+                    PostedOn = rawTrans.DatePosted,
+                    RefNumber = rawTrans.RefNumber,
+                    TransactionId = rawTrans.TransactionId,
+                    Type = rawTrans.Type
+                };
+                statement.Transactions.Add(trans);
+            }
+
+            return statement;
+        }
+
+        private RawStatement BuildRaw()
+        {
+            RawStatement _statement = null;
             MemberInfo currentMember = null;
+            RawTransaction _currentTransaction = null;
 
             foreach (var token in Parser.Parse(_fileText))
             {
@@ -46,13 +74,13 @@ namespace QFXparser.Core
                         switch (result.Type)
                         {
                             case NodeType.StatementOpen:
-                                _statement = new Statement();
+                                _statement = new RawStatement();
                                 break;
                             case NodeType.StatementClose:
                                 return _statement;
                                 break;
                             case NodeType.TransactionOpen:
-                                _currentTransaction = new Transaction();
+                                _currentTransaction = new RawTransaction();
                                 break;
                             case NodeType.TransactionClose:
                                 _statement.Transactions.Add(_currentTransaction);
@@ -78,10 +106,10 @@ namespace QFXparser.Core
                         var property = (PropertyInfo)currentMember;
                         switch (property.DeclaringType.Name)
                         {
-                            case "Statement":
+                            case "RawStatement":
                                 property.SetValue(_statement, token.Content);
                                 break;
-                            case "Transaction":
+                            case "RawTransaction":
                                 property.SetValue(_currentTransaction, token.Content);
                                 break;
                             default:
@@ -98,36 +126,36 @@ namespace QFXparser.Core
         {
             var propertyResult = new PropertyResult();
 
-            if (typeof(Statement).GetCustomAttribute<NodeNameAttribute>().CloseTag == token)
+            if (typeof(RawStatement).GetCustomAttribute<NodeNameAttribute>().CloseTag == token)
             {
-                propertyResult.Member = typeof(Statement);
+                propertyResult.Member = typeof(RawStatement);
                 propertyResult.Type = NodeType.StatementClose;
                 return propertyResult;
             }
 
-            if (typeof(Transaction).GetCustomAttribute<NodeNameAttribute>().CloseTag == token)
+            if (typeof(RawTransaction).GetCustomAttribute<NodeNameAttribute>().CloseTag == token)
             {
-                propertyResult.Member = typeof(Transaction);
+                propertyResult.Member = typeof(RawTransaction);
                 propertyResult.Type = NodeType.TransactionClose;
                 return propertyResult;
             }
 
-            if (typeof(Statement).GetCustomAttribute<NodeNameAttribute>().OpenTag == token)
+            if (typeof(RawStatement).GetCustomAttribute<NodeNameAttribute>().OpenTag == token)
             {
-                propertyResult.Member = typeof(Statement);
+                propertyResult.Member = typeof(RawStatement);
                 propertyResult.Type = NodeType.StatementOpen;
                 return propertyResult;
             }
 
-            if (typeof(Transaction).GetCustomAttribute<NodeNameAttribute>().OpenTag == token)
+            if (typeof(RawTransaction).GetCustomAttribute<NodeNameAttribute>().OpenTag == token)
             {
-                propertyResult.Member = typeof(Transaction);
+                propertyResult.Member = typeof(RawTransaction);
                 propertyResult.Type = NodeType.TransactionOpen;
                 return propertyResult;
             }
 
 
-            var statementMember = typeof(Statement).GetProperties().FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
+            var statementMember = typeof(RawStatement).GetProperties().FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
 
             if (statementMember != null)
             {
@@ -136,7 +164,7 @@ namespace QFXparser.Core
                 return propertyResult;
             }
 
-            var transactionMember = typeof(Transaction).GetProperties().Where(m => m.GetCustomAttribute<NodeNameAttribute>() != null)
+            var transactionMember = typeof(RawTransaction).GetProperties().Where(m => m.GetCustomAttribute<NodeNameAttribute>() != null)
                 .FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
 
             if (transactionMember != null)
@@ -150,21 +178,5 @@ namespace QFXparser.Core
 
         }
 
-    }
-
-    internal class PropertyResult
-    {
-        public MemberInfo Member { get; set; }
-        public NodeType Type { get; set; }
-    }
-
-    internal enum NodeType
-    {
-        StatementOpen,
-        StatementClose,
-        TransactionOpen,
-        TransactionClose,
-        StatementProp,
-        TransactionProp
-    }
+    }    
 }

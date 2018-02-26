@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
-namespace QFXparser.Core
+namespace QFXparser
 {
     public class Token
     {

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QFXparser.Core\QFXparser.Core.csproj" />
+    <ProjectReference Include="..\QFXparser\QFXparser.csproj" />
   </ItemGroup>
 
 </Project>

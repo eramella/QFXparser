@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QFXparser.Core
+namespace QFXparser
 {
     public class Parser
     {

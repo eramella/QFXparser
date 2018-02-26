@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QFXparser.Core
+namespace QFXparser
 {
     [NodeName("CCSTMTRS")]
-    public class Statement
+    internal class RawStatement
     {
         [NodeName("ACCTID")]
         public string AccountNum { get; set; }
 
         [NodeName("BANKTRANLIST")]
-        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public ICollection<RawTransaction> Transactions { get; set; } = new List<RawTransaction>();
     }
 }

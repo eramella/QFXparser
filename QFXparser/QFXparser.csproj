@@ -9,11 +9,14 @@
     <Description>Simple parser for .qfx and .qbo files.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseUrl>https://raw.githubusercontent.com/eramella/QFXparser/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl />
+    <PackageProjectUrl>https://github.com/eramella/QFXparser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/eramella/QFXparser</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
     <PackageTags>qfx, financial, parser, quickbooks, dotnet, netstandard2</PackageTags>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
+    <PackageReleaseNotes>See Changelog:
+https://github.com/eramella/QFXparser/blob/master/CHANGELOG.md</PackageReleaseNotes>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
 </Project>

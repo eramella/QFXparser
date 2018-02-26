@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
 
-namespace QFXparser.Core
+namespace QFXparser
 {
     [NodeName("STMTTRN", "/STMTTRN")]
-    public class Transaction
+    internal class RawTransaction
     {
         [NodeName("TRNTYPE")]
         public string Type { get; set; }
@@ -31,14 +31,14 @@ namespace QFXparser.Core
         {
             get
             {
-                var dateStr = PostedOn.Substring(0, 18);
+                var dateStr = PostedOn.Substring(0, 18) + "Z";
                 var tzstr = PostedOn.Substring(19).Split(':');
                 var timeZoneName = tzstr[1].TrimEnd(']');
                 var timeSpan = Convert.ToDouble(tzstr[0]);
-                var date = DateTime.ParseExact(dateStr, "yyyyMMddHHmmss.fff", CultureInfo.CurrentCulture);
+                var date = DateTimeOffset.ParseExact(dateStr, "yyyyMMddHHmmss.fffZ", CultureInfo.InvariantCulture);
                 var tzi = TimeZoneInfo.CreateCustomTimeZone(timeZoneName, TimeSpan.FromHours(timeSpan), timeZoneName, timeZoneName);
-                TimeZoneInfo.ConvertTime(date, tzi);
-                return date;
+                var newdate = TimeZoneInfo.ConvertTime(date, tzi);
+                return newdate.DateTime;
             }
         }
 
