@@ -2,7 +2,7 @@
 
 namespace QFXparser
 {
-    public class Token
+    internal class Token
     {
         private StringBuilder _content;
 

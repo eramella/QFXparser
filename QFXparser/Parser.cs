@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QFXparser
 {
-    public class Parser
+    internal class Parser
     {
         public static IEnumerable<Token> Parse(string fileText)
         {

@@ -1,37 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace QFXparser
 {
-    public class QFXparser
-    {
-
-        
+    public class FileParser
+    {        
         private string _fileText;
 
-        public QFXparser(string fileNamePath)
+        public FileParser(string fileNamePath)
         {
-            using (StreamReader sr = new StreamReader(fileNamePath))
+            using (StreamReader sr = new StreamReader(fileNamePath,true))
             {
                 _fileText = sr.ReadToEnd();
             }
 
         }
 
-        public QFXparser(Stream fileStream)
+        public FileParser(Stream fileStream)
         {
-            using (StreamReader sr = new StreamReader(fileStream))
+            using (StreamReader sr = new StreamReader(fileStream,true))
             {
                 _fileText = sr.ReadToEnd();
             }
 
         }
 
-        public Statement Build()
+        public Statement BuildStatement()
         {
             RawStatement rawStatement = BuildRaw();
 

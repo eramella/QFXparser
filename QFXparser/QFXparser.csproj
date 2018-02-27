@@ -12,8 +12,8 @@
     <PackageProjectUrl>https://github.com/eramella/QFXparser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/eramella/QFXparser</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <PackageTags>qfx, financial, parser, quickbooks, dotnet, netstandard2</PackageTags>
-    <Version>1.1.0</Version>
+    <PackageTags>qfx, financial, parser, quickbooks, dotnet, netstandard2, qbo</PackageTags>
+    <Version>1.2.0</Version>
     <PackageReleaseNotes>See Changelog:
 https://github.com/eramella/QFXparser/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>

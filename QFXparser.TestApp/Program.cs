@@ -9,10 +9,10 @@ namespace QFXparser.TestApp {
             Console.Write("Type the path of the file you would like to upload: ");
             string qfxpath = Console.ReadLine();//Directory.GetParent("ofx.qbo").Parent.FullName + "\\Files\\ofx.qbo";
             Stream stream = new FileStream(qfxpath, FileMode.Open);
-            QFXparser parser = new QFXparser(stream);
+            FileParser parser = new FileParser(stream);
 
             Console.WriteLine("Starting to parse...");
-            Statement result = parser.Build();
+            Statement result = parser.BuildStatement();
             var str = JsonConvert.SerializeObject(result);
             Console.WriteLine(str);
             Console.ReadLine();

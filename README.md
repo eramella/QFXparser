@@ -6,8 +6,10 @@ Pass to the library a file path or a Strem and it will return a "Statement" obje
 Example:
 
 ```csharp
-QFXparser parser = new QFXparser("C:\\filename.qbo");
-Statement result = parser.Build();
+using QFXparser;
+
+FileParser parser = new FileParser("C:\\filename.qbo");
+Statement result = parser.BuildStatement();
 ```
 
 The returned objects are:

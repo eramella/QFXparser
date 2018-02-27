@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace QFXparser
 {
@@ -31,12 +32,13 @@ namespace QFXparser
         {
             get
             {
-                var dateStr = PostedOn.Substring(0, 18) + "Z";
-                var tzstr = PostedOn.Substring(19).Split(':');
-                var timeZoneName = tzstr[1].TrimEnd(']');
-                var timeSpan = Convert.ToDouble(tzstr[0]);
-                var date = DateTimeOffset.ParseExact(dateStr, "yyyyMMddHHmmss.fffZ", CultureInfo.InvariantCulture);
-                var tzi = TimeZoneInfo.CreateCustomTimeZone(timeZoneName, TimeSpan.FromHours(timeSpan), timeZoneName, timeZoneName);
+                var dateStr = PostedOn.Substring(0, 12) + "Z";
+                Regex regex = new Regex(@"(?<=\[)([^)]+)(?=\])");
+                var tzstr = regex.Match(PostedOn).Groups[0].Value;
+                var tzstrSplit = tzstr.Split(':');
+                var timeSpan = Convert.ToDouble(tzstrSplit[0]);
+                var date = DateTimeOffset.ParseExact(dateStr, "yyyyMMddHHmmZ", CultureInfo.InvariantCulture);
+                var tzi = TimeZoneInfo.CreateCustomTimeZone(tzstrSplit[1], TimeSpan.FromHours(timeSpan), tzstrSplit[1], tzstrSplit[1]);
                 var newdate = TimeZoneInfo.ConvertTime(date, tzi);
                 return newdate.DateTime;
             }
