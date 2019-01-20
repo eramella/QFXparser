@@ -37,4 +37,8 @@ public class Transaction
 }
 ```
 
+### Transaction Dates
+In case the financial institution is not including the timezone with the transaction date, we assume it is UTC.
+
+
 Please let me know if any issues and if you like give a star.
