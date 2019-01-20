@@ -35,10 +35,14 @@ namespace QFXparser
                 var dateStr = PostedOn.Substring(0, 12) + "Z";
                 Regex regex = new Regex(@"(?<=\[)([^)]+)(?=\])");
                 var tzstr = regex.Match(PostedOn).Groups[0].Value;
-                var tzstrSplit = tzstr.Split(':');
-                var timeSpan = Convert.ToDouble(tzstrSplit[0]);
+                TimeZoneInfo tzi = TimeZoneInfo.Utc;
+                if (!string.IsNullOrEmpty(tzstr))
+                {
+                    var tzstrSplit = tzstr.Split(':');
+                    var timeSpan = Convert.ToDouble(tzstrSplit[0]);
+                    tzi = TimeZoneInfo.CreateCustomTimeZone(tzstrSplit[1], TimeSpan.FromHours(timeSpan), tzstrSplit[1], tzstrSplit[1]);
+                }
                 var date = DateTimeOffset.ParseExact(dateStr, "yyyyMMddHHmmZ", CultureInfo.InvariantCulture);
-                var tzi = TimeZoneInfo.CreateCustomTimeZone(tzstrSplit[1], TimeSpan.FromHours(timeSpan), tzstrSplit[1], tzstrSplit[1]);
                 var newdate = TimeZoneInfo.ConvertTime(date, tzi);
                 return newdate.DateTime;
             }

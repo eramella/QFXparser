@@ -82,6 +82,12 @@ namespace QFXparser
                                 _currentTransaction = null;
                                 break;
                             case NodeType.StatementProp:
+                                if (_statement == null)
+                                {
+                                    _statement = new RawStatement();
+                                }
+                                currentMember = result.Member;
+                                break;
                             case NodeType.TransactionProp:
                                 currentMember = result.Member;
                                 break;
