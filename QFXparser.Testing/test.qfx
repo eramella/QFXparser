@@ -1,0 +1,79 @@
+OFXHEADER:100
+DATA:OFXSGML
+VERSION:102
+SECURITY:NONE
+ENCODING:USASCII
+CHARSET:1252
+COMPRESSION:NONE
+OLDFILEUID:NONE
+NEWFILEUID:NONE
+
+<OFX>
+    <SIGNONMSGSRSV1>
+        <SONRS>
+            <STATUS>
+                <CODE>0
+                <SEVERITY>INFO
+            </STATUS>
+            <DTSERVER>20180708011545[0:UTC]
+            <LANGUAGE>ENG
+            <FI>
+                <ORG>Bank of America
+                <FID>9876
+            </FI>
+            <INTU.BID>3456
+        </SONRS>
+    </SIGNONMSGSRSV1>
+    <CREDITCARDMSGSRSV1>
+        <CCSTMTTRNRS>
+            <TRNUID>20180708011545[0:UTC]
+            <STATUS>
+                <CODE>0
+                <SEVERITY>INFO
+            </STATUS>
+            <CCSTMTRS>
+                <CURDEF>USD
+                <CCACCTFROM>
+                    <ACCTID>1234123409870987
+                </CCACCTFROM>
+                <BANKTRANLIST>
+                    <DTSTART>20180427160000[0:UTC]
+                    <DTEND>20180525160000[0:UTC]
+                    <STMTTRN>
+                        <TRNTYPE>PAYMENT
+                        <DTPOSTED>20180427160000[0:UTC]
+                        <TRNAMT>-27.18
+                        <FITID>555444
+                        <CORRECTFITID>555444
+                        <CORRECTACTION>REPLACE
+                        <NAME>AMAZON.COM AMZN.COM/BILL AMZN.CO
+                        <MEMO>AMAZON.COM AMZN.COM/BILL AMZN.CO
+                    </STMTTRN>
+                    <STMTTRN>
+                        <TRNTYPE>PAYMENT
+                        <DTPOSTED>20180430160000[0:UTC]
+                        <TRNAMT>-25.00
+                        <FITID>666876
+                        <CORRECTFITID>666876
+                        <CORRECTACTION>REPLACE
+                        <NAME>NEW JERSEY E-ZPASS 888-288-6865 
+                        <MEMO>NEW JERSEY E-ZPASS 888-288-6865 
+                    </STMTTRN>
+                    <STMTTRN>
+                        <TRNTYPE>CREDIT
+                        <DTPOSTED>20180501160000[0:UTC]
+                        <TRNAMT>56.77invalid
+                        <FITID>46576
+                        <CORRECTFITID>46576
+                        <CORRECTACTION>REPLACE
+                        <NAME>PMT FROM BILL PAYER SERVICE
+                    </STMTTRN>
+                </BANKTRANLIST>
+                <LEDGERBAL>
+                    <BALAMT>-768.33
+                    <DTASOF>20180525000000[0:UTC]
+                </LEDGERBAL>
+            </CCSTMTRS>
+        </CCSTMTTRNRS>
+    </CREDITCARDMSGSRSV1>
+</OFX>

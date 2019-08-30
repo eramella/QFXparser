@@ -11,10 +11,10 @@ namespace QFXparser
         public string Type { get; set; }
 
         [NodeName("DTPOSTED")]
-        public String PostedOn { get; set; } //20180119000000.000[-7:MST]
+        public DateTime PostedOn { get; set; }
 
         [NodeName("TRNAMT")]
-        public String StrAmount { get; set; }
+        public Decimal Amount { get; set; }
 
         [NodeName("FITID")]
         public string TransactionId { get; set; }
@@ -27,35 +27,5 @@ namespace QFXparser
 
         [NodeName("MEMO")]
         public string Memo { get; set; }
-
-        public DateTime DatePosted
-        {
-            get
-            {
-                var dateStr = PostedOn.Substring(0, 12) + "Z";
-                Regex regex = new Regex(@"(?<=\[)([^)]+)(?=\])");
-                var tzstr = regex.Match(PostedOn).Groups[0].Value;
-                TimeZoneInfo tzi = TimeZoneInfo.Utc;
-                if (!string.IsNullOrEmpty(tzstr))
-                {
-                    var tzstrSplit = tzstr.Split(':');
-                    var timeSpan = Convert.ToDouble(tzstrSplit[0]);
-                    tzi = TimeZoneInfo.CreateCustomTimeZone(tzstrSplit[1], TimeSpan.FromHours(timeSpan), tzstrSplit[1], tzstrSplit[1]);
-                }
-                var date = DateTimeOffset.ParseExact(dateStr, "yyyyMMddHHmmZ", CultureInfo.InvariantCulture);
-                var newdate = TimeZoneInfo.ConvertTime(date, tzi);
-                return newdate.DateTime;
-            }
-        }
-
-        public Decimal Amount
-        {
-            get
-            {
-                decimal amount = 0;
-                Decimal.TryParse(StrAmount, out amount);
-                return amount;
-            }
-        }
     }
 }
