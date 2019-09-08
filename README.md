@@ -43,7 +43,6 @@ public class Transaction
 public class LedgerBalance
 {
     public decimal Amount { get; set; }
-
     public DateTime AsOf { get; set; }
 }
 ```
