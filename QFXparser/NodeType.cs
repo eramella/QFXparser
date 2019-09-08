@@ -11,6 +11,9 @@ namespace QFXparser
         TransactionOpen,
         TransactionClose,
         StatementProp,
-        TransactionProp
+        TransactionProp,
+        LedgerBalanceOpen,
+        LedgerBalanceClose,
+        LedgerBalanceProp
     }
 }

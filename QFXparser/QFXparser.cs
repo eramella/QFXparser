@@ -1,12 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
 namespace QFXparser
 {
     public class FileParser
-    {        
+    {
         private string _fileText;
+        private RawLedgerBalance _ledgerBalance;
 
         public FileParser(string fileNamePath)
         {
@@ -30,25 +32,31 @@ namespace QFXparser
         {
             RawStatement rawStatement = BuildRaw();
 
-            Statement statement = new Statement()
+            Statement statement = new Statement
             {
                 AccountNum = rawStatement.AccountNum
             };
 
             foreach (var rawTrans in rawStatement.Transactions)
             {
-                Transaction trans = new Transaction()
+                Transaction trans = new Transaction
                 {
                     Amount = rawTrans.Amount,
                     Memo = rawTrans.Memo,
                     Name = rawTrans.Name,
-                    PostedOn = rawTrans.DatePosted,
+                    PostedOn = rawTrans.PostedOn,
                     RefNumber = rawTrans.RefNumber,
                     TransactionId = rawTrans.TransactionId,
                     Type = rawTrans.Type
                 };
                 statement.Transactions.Add(trans);
             }
+
+            statement.LedgerBalance = new LedgerBalance
+            {
+                Amount = rawStatement.LedgerBalance.Amount,
+                AsOf = rawStatement.LedgerBalance.AsOf
+            };
 
             return statement;
         }
@@ -91,6 +99,20 @@ namespace QFXparser
                             case NodeType.TransactionProp:
                                 currentMember = result.Member;
                                 break;
+                            case NodeType.LedgerBalanceOpen:
+                                _ledgerBalance = new RawLedgerBalance();
+                                break;
+                            case NodeType.LedgerBalanceClose:
+                                _statement.LedgerBalance.Amount = _ledgerBalance.Amount;
+                                _statement.LedgerBalance.AsOf = _ledgerBalance.AsOf;
+                                break;
+                            case NodeType.LedgerBalanceProp:
+                                if (_ledgerBalance == null)
+                                {
+                                    _ledgerBalance = new RawLedgerBalance();
+                                }
+                                currentMember = result.Member;
+                                break;
                             default:
                                 break;
                         }
@@ -108,10 +130,13 @@ namespace QFXparser
                         switch (property.DeclaringType.Name)
                         {
                             case "RawStatement":
-                                property.SetValue(_statement, token.Content);
+                                property.SetValue(_statement, ConvertQfxType(token.Content, property.PropertyType));
                                 break;
                             case "RawTransaction":
-                                property.SetValue(_currentTransaction, token.Content);
+                                property.SetValue(_currentTransaction, ConvertQfxType(token.Content, property.PropertyType));
+                                break;
+                            case "RawLedgerBalance":
+                                property.SetValue(_ledgerBalance, ConvertQfxType(token.Content, property.PropertyType));
                                 break;
                             default:
                                 break;
@@ -121,6 +146,27 @@ namespace QFXparser
             }
 
             return _statement;
+        }
+
+        private object ConvertQfxType(string content, Type targetType)
+        {
+            object result;
+            if (targetType == typeof(DateTime))
+            {
+                result = ParsingHelper.ParseDate(content);
+            }
+            else
+            {
+                try
+                {
+                    result = Convert.ChangeType(content, targetType);
+                }
+                catch (Exception)
+                {
+                    result = targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+                }
+            }
+            return result;
         }
 
         private PropertyResult GetPropertyInfo(string token)
@@ -155,6 +201,19 @@ namespace QFXparser
                 return propertyResult;
             }
 
+            if (typeof(RawLedgerBalance).GetCustomAttribute<NodeNameAttribute>().OpenTag == token)
+            {
+                propertyResult.Member = typeof(RawLedgerBalance);
+                propertyResult.Type = NodeType.LedgerBalanceOpen;
+                return propertyResult;
+            }
+
+            if (typeof(RawLedgerBalance).GetCustomAttribute<NodeNameAttribute>().CloseTag == token)
+            {
+                propertyResult.Member = typeof(RawLedgerBalance);
+                propertyResult.Type = NodeType.LedgerBalanceClose;
+                return propertyResult;
+            }
 
             var statementMember = typeof(RawStatement).GetProperties().FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
 
@@ -175,9 +234,17 @@ namespace QFXparser
                 return propertyResult;
             }
 
+            var balanceMember = typeof(RawLedgerBalance).GetProperties().Where(m => m.GetCustomAttribute<NodeNameAttribute>() != null)
+                .FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
+
+            if (balanceMember != null)
+            {
+                propertyResult.Member = balanceMember;
+                propertyResult.Type = NodeType.LedgerBalanceProp;
+                return propertyResult;
+            }
+
             return null;
-
         }
-
     }    
 }
