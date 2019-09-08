@@ -19,7 +19,8 @@ The returned objects are:
 public class Statement
 {
     public string AccountNum { get; set; }
-    public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public ICollection<Transaction> Transactions { get; set; }
+    public LedgerBalance LedgerBalance { get; set; }
 }
 ```
 
@@ -37,8 +38,20 @@ public class Transaction
 }
 ```
 
+**Ledger Balance**
+```CSharp
+public class LedgerBalance
+{
+    public decimal Amount { get; set; }
+
+    public DateTime AsOf { get; set; }
+}
+```
+
 ### Transaction Dates
 In case the financial institution is not including the timezone with the transaction date, we assume it is UTC.
 
 
 Please let me know if any issues and if you like give a star.
+
+Thanks to @DashNY for adding Ledger Balance and testing!

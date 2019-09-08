@@ -1,3 +1,6 @@
+### v. 1.3.0
+- Added support for Ledger Balance (tanks to @DashNY)
+
 ### v. 1.2.1
 - Fixed missing Open and Close tags for Statement
 - Fixed Date parsing in when time zone is missing. By default the timezone is UTC
