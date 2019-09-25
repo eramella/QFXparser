@@ -12,34 +12,34 @@ namespace QFXparser
 
         public FileParser(string fileNamePath)
         {
-            using (StreamReader sr = new StreamReader(fileNamePath,true))
+            using (var sr = new StreamReader(fileNamePath, true))
             {
                 _fileText = sr.ReadToEnd();
             }
-
         }
 
         public FileParser(Stream fileStream)
         {
-            using (StreamReader sr = new StreamReader(fileStream,true))
+            using (var sr = new StreamReader(fileStream, true))
             {
                 _fileText = sr.ReadToEnd();
             }
-
         }
 
         public Statement BuildStatement()
         {
-            RawStatement rawStatement = BuildRaw();
+            var rawStatement = BuildRaw();
 
-            Statement statement = new Statement
+            var statement = new Statement
             {
                 AccountNum = rawStatement.AccountNum
             };
 
+            var rawLedgerBalance = rawStatement.LedgerBalance;
+            var currBalance = rawLedgerBalance != null ? rawLedgerBalance.Amount : (decimal?)null;
             foreach (var rawTrans in rawStatement.Transactions)
             {
-                Transaction trans = new Transaction
+                var trans = new Transaction
                 {
                     Amount = rawTrans.Amount,
                     Memo = rawTrans.Memo,
@@ -47,16 +47,21 @@ namespace QFXparser
                     PostedOn = rawTrans.PostedOn,
                     RefNumber = rawTrans.RefNumber,
                     TransactionId = rawTrans.TransactionId,
-                    Type = rawTrans.Type
+                    Type = rawTrans.Type,
+                    Balance = currBalance
                 };
                 statement.Transactions.Add(trans);
+                currBalance -= rawTrans.Amount;
             }
-
-            statement.LedgerBalance = new LedgerBalance
+ 
+            if (rawLedgerBalance != null)
             {
-                Amount = rawStatement.LedgerBalance.Amount,
-                AsOf = rawStatement.LedgerBalance.AsOf
-            };
+                statement.LedgerBalance = new LedgerBalance
+                {
+                    Amount = rawLedgerBalance.Amount,
+                    AsOf = rawLedgerBalance.AsOf
+                };
+            }
 
             return statement;
         }
@@ -81,7 +86,6 @@ namespace QFXparser
                                 break;
                             case NodeType.StatementClose:
                                 return _statement;
-                                break;
                             case NodeType.TransactionOpen:
                                 _currentTransaction = new RawTransaction();
                                 break;
@@ -101,6 +105,7 @@ namespace QFXparser
                                 break;
                             case NodeType.LedgerBalanceOpen:
                                 _ledgerBalance = new RawLedgerBalance();
+                                _statement.LedgerBalance = _ledgerBalance;
                                 break;
                             case NodeType.LedgerBalanceClose:
                                 _statement.LedgerBalance.Amount = _ledgerBalance.Amount;
@@ -110,6 +115,7 @@ namespace QFXparser
                                 if (_ledgerBalance == null)
                                 {
                                     _ledgerBalance = new RawLedgerBalance();
+                                    _statement.LedgerBalance = _ledgerBalance;
                                 }
                                 currentMember = result.Member;
                                 break;

@@ -11,5 +11,6 @@ namespace QFXparser
         public string RefNumber { get; set; }
         public string Name { get; set; }
         public string Memo { get; set; }
+        public Decimal? Balance { get; set; }
     }
 }
