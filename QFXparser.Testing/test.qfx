@@ -68,6 +68,14 @@ NEWFILEUID:NONE
                         <CORRECTACTION>REPLACE
                         <NAME>PMT FROM BILL PAYER SERVICE
                     </STMTTRN>
+					<STMTTRN>
+						<TRNTYPE>CHECK
+						<DTPOSTED>20190201120000[0:UTC]
+						<TRNAMT>-294.00
+						<FITID>2019020112
+						<CHECKNUM>133
+						<NAME>CHECK 133
+                   </STMTTRN>
                 </BANKTRANLIST>
                 <LEDGERBAL>
                     <BALAMT>-768.33

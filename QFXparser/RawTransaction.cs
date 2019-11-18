@@ -27,5 +27,8 @@ namespace QFXparser
 
         [NodeName("MEMO")]
         public string Memo { get; set; }
+
+        [NodeName("CHECKNUM")]
+        public string CheckNum { get; set; }
     }
 }

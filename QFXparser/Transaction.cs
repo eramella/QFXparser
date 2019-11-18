@@ -9,6 +9,7 @@ namespace QFXparser
         public Decimal Amount { get; set; }
         public string TransactionId { get; set; }
         public string RefNumber { get; set; }
+        public string CheckNum { get; set; }
         public string Name { get; set; }
         public string Memo { get; set; }
     }

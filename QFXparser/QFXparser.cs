@@ -46,6 +46,7 @@ namespace QFXparser
                     Name = rawTrans.Name,
                     PostedOn = rawTrans.PostedOn,
                     RefNumber = rawTrans.RefNumber,
+                    CheckNum = rawTrans.CheckNum,
                     TransactionId = rawTrans.TransactionId,
                     Type = rawTrans.Type
                 };
