@@ -3,22 +3,17 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Xunit;
 
 namespace QFXparser.Testing
 {
     public class ParsingTest
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// Amount will be zero if the decimal separator of current
-        /// culture info is not a dot. The test will fail.
-        /// </remarks>
         [Fact]
         public void TestSimple()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             var parser = new FileParser("test.qfx");
             var statement = parser.BuildStatement();
             var transactions = statement.Transactions.ToList();
@@ -29,28 +24,6 @@ namespace QFXparser.Testing
             Assert.Equal("AMAZON.COM AMZN.COM/BILL AMZN.CO", transactions[0].Memo);
             Assert.Equal(new DateTime(2018, 4, 27, 16, 0, 0, DateTimeKind.Utc), transactions[0].PostedOn);
             Assert.Equal(0m, transactions[2].Amount); // test for default value if invalid in .qfx
-        }
-
-        /// <summary>
-        /// Here, the amount is zero because the amount is incorrectly parsed
-        /// because of the culture decimal separator. 
-        /// </summary>
-        [Fact]
-        public void TestVariantCultureInfo()
-        {
-            var parser = new FileParser(new StreamReader("test.qfx"), new CultureInfo("fr-CA"));
-            var statement = parser.BuildStatement();
-            var transactions = statement.Transactions.ToList();
-            Assert.Equal(0m, transactions[0].Amount);
-        }
-
-        [Fact]
-        public void TestInvariantCultureInfo()
-        {
-            var parser = new FileParser(new StreamReader("test.qfx"), CultureInfo.InvariantCulture);
-            var statement = parser.BuildStatement();
-            var transactions = statement.Transactions.ToList();
-            Assert.Equal(-27.18m, transactions[0].Amount);
         }
 
         [Fact]
