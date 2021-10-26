@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,13 @@ namespace QFXparser
     {
         private string _fileText;
         private RawLedgerBalance _ledgerBalance;
+        private readonly CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
+        /// <summary>
+        /// Initialize a FileParser with UTF-8 encoding and
+        /// current culture info.
+        /// </summary>
+        /// <param name="fileNamePath"></param>
         public FileParser(string fileNamePath)
         {
             using (StreamReader sr = new StreamReader(fileNamePath,true))
@@ -19,13 +26,36 @@ namespace QFXparser
 
         }
 
+        /// <summary>
+        /// Initialize a FileParser with UTF-8 encoding and current culture info.
+        /// </summary>
+        /// <param name="fileStream"></param>
         public FileParser(Stream fileStream)
         {
-            using (StreamReader sr = new StreamReader(fileStream,true))
+            using (StreamReader sr = new StreamReader(fileStream, true))
             {
                 _fileText = sr.ReadToEnd();
             }
 
+        }
+
+        /// <summary>
+        /// Initialize a FileParser with invariant culture info.
+        /// </summary>
+        /// <param name="streamReader"></param>
+        public FileParser(StreamReader streamReader):this(streamReader, CultureInfo.InvariantCulture)
+        {
+        }
+
+        /// <summary>
+        /// Initialize a FileParser
+        /// </summary>
+        /// <param name="streamReader"></param>
+        /// <param name="cultureInfo"></param>
+        public FileParser(StreamReader streamReader, CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo;
+            _fileText = streamReader.ReadToEnd();
         }
 
         public Statement BuildStatement()
@@ -159,7 +189,7 @@ namespace QFXparser
             {
                 try
                 {
-                    result = Convert.ChangeType(content, targetType);
+                    result = Convert.ChangeType(content, targetType, _cultureInfo);
                 }
                 catch (Exception)
                 {
