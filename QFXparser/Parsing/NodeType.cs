@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QFXparser
+namespace QFXparser.Parsing
 {
     internal enum NodeType
     {

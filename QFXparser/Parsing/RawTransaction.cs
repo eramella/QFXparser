@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
-namespace QFXparser
+namespace QFXparser.Parsing
 {
     [NodeName("STMTTRN", "/STMTTRN")]
     internal class RawTransaction

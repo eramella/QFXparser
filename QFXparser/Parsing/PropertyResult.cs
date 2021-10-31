@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace QFXparser
+namespace QFXparser.Parsing
 {
     internal class PropertyResult
     {

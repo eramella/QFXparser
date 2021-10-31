@@ -1,8 +1,10 @@
-﻿using System;
+﻿using QFXparser.Parsing;
+using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace QFXparser
 {
@@ -18,11 +20,21 @@ namespace QFXparser
         /// <param name="fileNamePath"></param>
         public FileParser(string fileNamePath)
         {
-            using (StreamReader sr = new StreamReader(fileNamePath,true))
+            var encoding = GetEncodingFromHeaders(fileNamePath);
+            if (encoding != null)
             {
-                _fileText = sr.ReadToEnd();
+                using (StreamReader sr = new StreamReader(fileNamePath, encoding))
+                {
+                    _fileText = sr.ReadToEnd();
+                }
             }
-
+            else 
+            {
+                using (StreamReader sr = new StreamReader(fileNamePath, true))
+                {
+                    _fileText = sr.ReadToEnd();
+                }
+            }
         }
 
         /// <summary>
@@ -41,6 +53,7 @@ namespace QFXparser
         /// <summary>
         /// Initialize a FileParser with invariant culture info.
         /// </summary>
+        /// <remarks>Depricated</remarks>
         /// <param name="streamReader"></param>
         public FileParser(StreamReader streamReader):this(streamReader, CultureInfo.InvariantCulture)
         {
@@ -49,6 +62,7 @@ namespace QFXparser
         /// <summary>
         /// Initialize a FileParser
         /// </summary>
+        /// <remarks>Depricated</remarks>
         /// <param name="streamReader"></param>
         /// <param name="cultureInfo"></param>
         public FileParser(StreamReader streamReader, CultureInfo cultureInfo)
@@ -275,6 +289,48 @@ namespace QFXparser
             }
 
             return null;
+        }
+
+        private Encoding GetEncodingFromHeaders(string filePath)
+        {
+            Stream stream = new FileStream(filePath, FileMode.Open);
+            return GetEncodingFromHeaders(stream);
+        }
+
+        private Encoding GetEncodingFromHeaders(Stream fileStrem)
+        {
+            int? code = null;
+            using (StreamReader sr = new StreamReader(fileStrem, true))
+            {
+                string[] separator = { ":" };
+                string currentLine = sr.ReadLine();
+                
+                while (!currentLine.StartsWith("<") && !sr.EndOfStream)
+                {
+                    if (currentLine.StartsWith("CHARSET"))
+                    {
+                        var split = currentLine.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                        int result;
+                        if (int.TryParse(split[1], out result))
+                        {
+                            code = result;
+                        }
+                    }
+
+                    currentLine = sr.ReadLine();
+                }
+            }
+
+            int pageCode = code == null ? 1252 : code.GetValueOrDefault();
+            Encoding encoding = null;
+            try
+            {
+                encoding = CodePagesEncodingProvider.Instance.GetEncoding(pageCode);
+            }
+            finally
+            {
+            }
+            return encoding;
         }
     }    
 }

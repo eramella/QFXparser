@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace QFXparser
+namespace QFXparser.Parsing
 {
     internal class Token
     {

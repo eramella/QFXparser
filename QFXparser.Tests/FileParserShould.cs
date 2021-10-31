@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading;
 using Xunit;
 
-namespace QFXparser.Testing
+namespace QFXparser.Tests
 {
-    public class ParsingTest
+    public class FileParserShould
     {
         [Fact]
-        public void TestSimple()
+        public void ReturnCorrectValuesWithInvariantCulture()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             var parser = new FileParser("test.qfx");
@@ -27,7 +27,7 @@ namespace QFXparser.Testing
         }
 
         [Fact]
-        public void TestCp1252()
+        public void ParseSpecialCharWithCharset1252()
         {
             Encoding encoding1252 = CodePagesEncodingProvider.Instance.GetEncoding(1252);
             var parser = new FileParser(new StreamReader("testSpecialChars.qfx", encoding1252), CultureInfo.InvariantCulture);
@@ -37,30 +37,12 @@ namespace QFXparser.Testing
         }
 
         [Fact]
-        public void TestUtf8WithSpecialChars()
+        public void ParseSpecialCharWithInvariantCultureNotReturningCorrectChar()
         {
             var parser = new FileParser(new StreamReader("testSpecialChars.qfx"), CultureInfo.InvariantCulture);
             var statement = parser.BuildStatement();
             var transactions = statement.Transactions.ToList();
             Assert.NotEqual("Retrait - Internet - Compte d'ép", transactions[0].Name);
-        }
-
-        [Fact]
-        public void TestDateTimeNoTimeZoneAssumesUtc()
-        {
-            Assert.Equal(new DateTime(2018, 5, 25, 0, 0, 0, DateTimeKind.Utc), ParsingHelper.ParseDate("20180525000000"));
-        }
-
-        [Fact]
-        public void TestDateTimeWithUtcTimeZone()
-        {
-            Assert.Equal(new DateTime(2018, 5, 25, 0, 0, 0, DateTimeKind.Utc), ParsingHelper.ParseDate("20180525000000[0:UTC]"));
-        }
-
-        [Fact]
-        public void TestDateTimeWithMstTimeZone()
-        {
-            Assert.Equal(new DateTime(2018, 1, 19, 0, 0, 0, DateTimeKind.Utc), ParsingHelper.ParseDate("20180119000000.000[-7:MST]"));
         }
     }
 }

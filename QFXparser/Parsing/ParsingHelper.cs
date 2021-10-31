@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
-namespace QFXparser
+namespace QFXparser.Parsing
 {
     internal static class ParsingHelper
     {

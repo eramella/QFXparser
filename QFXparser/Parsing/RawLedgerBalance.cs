@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QFXparser
+namespace QFXparser.Parsing
 {
     [NodeName("LEDGERBAL", "/LEDGERBAL")]
     public class RawLedgerBalance

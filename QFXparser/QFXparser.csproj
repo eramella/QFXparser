@@ -19,4 +19,8 @@ https://github.com/eramella/QFXparser/blob/master/CHANGELOG.md</PackageReleaseNo
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
+
 </Project>
