@@ -9,7 +9,6 @@ namespace QFXparser
     public class FileParser
     {
         private string _fileText;
-        private RawLedgerBalance _ledgerBalance;
         private readonly CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
         /// <summary>
@@ -96,6 +95,7 @@ namespace QFXparser
             RawStatement _statement = null;
             MemberInfo currentMember = null;
             RawTransaction _currentTransaction = null;
+            RawLedgerBalance _ledgerBalance = null;
 
             foreach (var token in Parser.Parse(_fileText))
             {
