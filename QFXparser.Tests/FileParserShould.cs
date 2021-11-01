@@ -30,19 +30,33 @@ namespace QFXparser.Tests
         public void ParseSpecialCharWithCharset1252()
         {
             Encoding encoding1252 = CodePagesEncodingProvider.Instance.GetEncoding(1252);
-            var parser = new FileParser(new StreamReader("testSpecialChars.qfx", encoding1252), CultureInfo.InvariantCulture);
+            using (var sr = new StreamReader("testSpecialChars.qfx", encoding1252))
+            {
+                var parser = new FileParser(sr, CultureInfo.InvariantCulture);
+                var statement = parser.BuildStatement();
+                var transactions = statement.Transactions.ToList();
+                Assert.Equal("Retrait - Internet - Compte d'ép", transactions[0].Name);
+            }
+        }
+
+        [Fact]
+        public void ParseSpecialCharCorrectly()
+        {
+            var parser = new FileParser("testSpecialChars.qfx");
             var statement = parser.BuildStatement();
             var transactions = statement.Transactions.ToList();
             Assert.Equal("Retrait - Internet - Compte d'ép", transactions[0].Name);
         }
-
         [Fact]
         public void ParseSpecialCharWithInvariantCultureNotReturningCorrectChar()
         {
-            var parser = new FileParser(new StreamReader("testSpecialChars.qfx"), CultureInfo.InvariantCulture);
-            var statement = parser.BuildStatement();
-            var transactions = statement.Transactions.ToList();
-            Assert.NotEqual("Retrait - Internet - Compte d'ép", transactions[0].Name);
+            using (var sr = new StreamReader("testSpecialChars.qfx"))
+            {
+                var parser = new FileParser(sr, CultureInfo.InvariantCulture);
+                var statement = parser.BuildStatement();
+                var transactions = statement.Transactions.ToList();
+                Assert.NotEqual("Retrait - Internet - Compte d'ép", transactions[0].Name);
+            }
         }
     }
 }

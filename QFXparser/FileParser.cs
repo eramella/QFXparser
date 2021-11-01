@@ -323,8 +323,10 @@ namespace QFXparser
 
         private Encoding GetEncodingFromHeaders(string filePath)
         {
-            Stream stream = new FileStream(filePath, FileMode.Open);
-            return GetEncodingFromHeaders(stream);
+            using (Stream stream = new FileStream(filePath, FileMode.Open))
+            {
+                return GetEncodingFromHeaders(stream);
+            }
         }
 
         private Encoding GetEncodingFromHeaders(Stream fileStrem)
