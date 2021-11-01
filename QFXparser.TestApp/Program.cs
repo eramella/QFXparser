@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.IO;
-using System.Text;
 
 namespace QFXparser.TestApp
 {
