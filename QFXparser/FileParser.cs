@@ -14,8 +14,17 @@ namespace QFXparser
         private readonly CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
         /// <summary>
-        /// Initialize a FileParser with UTF-8 encoding and
-        /// current culture info.
+        /// Initialize a FileParser with encoding set by the .qfx file or detected by the stream reader
+        /// and with specific culture info.
+        /// </summary>
+        /// <param name="fileNamePath"></param>
+        public FileParser(string fileNamePath, CultureInfo cultureInfo) : this(fileNamePath)
+        {
+            _cultureInfo = cultureInfo;        
+        }
+        /// <summary>
+        /// Initialize a FileParser with encoding set by the .qfx file or detected by the stream reader
+        /// with current culture info.
         /// </summary>
         /// <param name="fileNamePath"></param>
         public FileParser(string fileNamePath)
@@ -38,16 +47,37 @@ namespace QFXparser
         }
 
         /// <summary>
+        /// Initialize a FileParser with encoding set by the .qfx file or detected by the stream reader
+        /// and with specific culture info.
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <param name="cultureInfo"></param>
+        public FileParser(Stream fileStream, CultureInfo cultureInfo) : this(fileStream)
+        {
+            _cultureInfo = cultureInfo;
+        }
+
+        /// <summary>
         /// Initialize a FileParser with UTF-8 encoding and current culture info.
         /// </summary>
         /// <param name="fileStream"></param>
         public FileParser(Stream fileStream)
         {
-            using (StreamReader sr = new StreamReader(fileStream, true))
+            var encoding = GetEncodingFromHeaders(fileStream);
+            if (encoding != null)
             {
-                _fileText = sr.ReadToEnd();
+                using (StreamReader sr = new StreamReader(fileStream, encoding))
+                {
+                    _fileText = sr.ReadToEnd();
+                }
             }
-
+            else
+            {
+                using (StreamReader sr = new StreamReader(fileStream, true))
+                {
+                    _fileText = sr.ReadToEnd();
+                }
+            }
         }
 
         /// <summary>
@@ -322,7 +352,7 @@ namespace QFXparser
             }
 
             int pageCode = code == null ? 1252 : code.GetValueOrDefault();
-            Encoding encoding = null;
+            Encoding encoding;
             try
             {
                 encoding = CodePagesEncodingProvider.Instance.GetEncoding(pageCode);
