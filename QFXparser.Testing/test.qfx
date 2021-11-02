@@ -68,6 +68,15 @@ NEWFILEUID:NONE
                         <CORRECTACTION>REPLACE
                         <NAME>PMT FROM BILL PAYER SERVICE
                     </STMTTRN>
+                    <STMTTRN>
+                        <TRNTYPE>CHECK
+                        <DTPOSTED>20210930000000
+                        <TRNAMT>-225.00
+                        <FITID>7/30/2021 12:00:00 AM|3311628
+                        <CHECKNUM>2022
+                        <NAME>WITHDRAWAL, DRAFT NUMBER 2022
+                        <MEMO>, Withdrawal, Processed
+                     </STMTTRN>
                 </BANKTRANLIST>
                 <LEDGERBAL>
                     <BALAMT>-768.33

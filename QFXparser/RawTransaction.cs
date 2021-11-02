@@ -21,7 +21,10 @@ namespace QFXparser
 
         [NodeName("REFNUM")]
         public string RefNumber { get; set; }
-
+        
+        [NodeName("CHECKNUM")]
+        public string CheckNumber { get; set; }
+        
         [NodeName("NAME")]
         public string Name { get; set; }
 
