@@ -82,6 +82,10 @@ NEWFILEUID:NONE
                     <BALAMT>-768.33
                     <DTASOF>20180525000000[0:UTC]
                 </LEDGERBAL>
+                <AVAILBAL>
+                    <BALAMT>-267.24
+                    <DTASOF>20180525000000[0:UTC]
+                </AVAILBAL>
             </CCSTMTRS>
         </CCSTMTTRNRS>
     </CREDITCARDMSGSRSV1>

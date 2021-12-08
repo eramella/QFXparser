@@ -10,6 +10,8 @@ namespace QFXparser
     {
         private string _fileText;
         private RawLedgerBalance _ledgerBalance;
+        //private RawAvailableBalance _availableBalance;
+
         private readonly CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
         /// <summary>
@@ -89,6 +91,12 @@ namespace QFXparser
                 AsOf = rawStatement.LedgerBalance.AsOf
             };
 
+            //statement.AvailableBalance = new AvailableBalance
+            //{
+            //    Amount = rawStatement.AvailableBalance.Amount,
+            //    AsOf = rawStatement.AvailableBalance.AsOf
+            //};
+
             return statement;
         }
 
@@ -130,6 +138,7 @@ namespace QFXparser
                             case NodeType.TransactionProp:
                                 currentMember = result.Member;
                                 break;
+
                             case NodeType.LedgerBalanceOpen:
                                 _ledgerBalance = new RawLedgerBalance();
                                 break;
@@ -144,6 +153,22 @@ namespace QFXparser
                                 }
                                 currentMember = result.Member;
                                 break;
+
+                            //case NodeType.AvailableBalanceOpen:
+                            //    _availableBalance = new RawAvailableBalance();
+                            //    break;
+                            //case NodeType.AvailableBalanceClose:
+                            //    _statement.AvailableBalance.Amount = _availableBalance.Amount;
+                            //    _statement.AvailableBalance.AsOf = _availableBalance.AsOf;
+                            //    break;
+                            //case NodeType.AvailableBalanceProp:
+                            //    if (_availableBalance == null)
+                            //    {
+                            //        _availableBalance = new RawAvailableBalance();
+                            //    }
+                            //    currentMember = result.Member;
+                            //    break;
+
                             default:
                                 break;
                         }
@@ -169,6 +194,10 @@ namespace QFXparser
                             case "RawLedgerBalance":
                                 property.SetValue(_ledgerBalance, ConvertQfxType(token.Content, property.PropertyType));
                                 break;
+                            //case "RawAvailableBalance":
+                            //    property.SetValue(_availableBalance, ConvertQfxType(token.Content, property.PropertyType));
+                            //    break;
+
                             default:
                                 break;
                         }
@@ -246,6 +275,20 @@ namespace QFXparser
                 return propertyResult;
             }
 
+            //if (typeof(RawAvailableBalance).GetCustomAttribute<NodeNameAttribute>().OpenTag == token)
+            //{
+            //    propertyResult.Member = typeof(RawAvailableBalance);
+            //    propertyResult.Type = NodeType.AvailableBalanceOpen;
+            //    return propertyResult;
+            //}
+
+            //if (typeof(RawAvailableBalance).GetCustomAttribute<NodeNameAttribute>().CloseTag == token)
+            //{
+            //    propertyResult.Member = typeof(RawAvailableBalance);
+            //    propertyResult.Type = NodeType.AvailableBalanceClose;
+            //    return propertyResult;
+            //}
+
             var statementMember = typeof(RawStatement).GetProperties().FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
 
             if (statementMember != null)
@@ -265,15 +308,25 @@ namespace QFXparser
                 return propertyResult;
             }
 
-            var balanceMember = typeof(RawLedgerBalance).GetProperties().Where(m => m.GetCustomAttribute<NodeNameAttribute>() != null)
+            var ledgerBalanceMember = typeof(RawLedgerBalance).GetProperties().Where(m => m.GetCustomAttribute<NodeNameAttribute>() != null)
                 .FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
 
-            if (balanceMember != null)
+            if (ledgerBalanceMember != null)
             {
-                propertyResult.Member = balanceMember;
+                propertyResult.Member = ledgerBalanceMember;
                 propertyResult.Type = NodeType.LedgerBalanceProp;
                 return propertyResult;
             }
+
+            //var availableBalanceMember = typeof(RawAvailableBalance).GetProperties().Where(m => m.GetCustomAttribute<NodeNameAttribute>() != null)
+            //    .FirstOrDefault(m => m.GetCustomAttribute<NodeNameAttribute>().OpenTag == token);
+
+            //if (availableBalanceMember != null)
+            //{
+            //    propertyResult.Member = availableBalanceMember;
+            //    propertyResult.Type = NodeType.AvailableBalanceProp;
+            //    return propertyResult;
+            //}
 
             return null;
         }
