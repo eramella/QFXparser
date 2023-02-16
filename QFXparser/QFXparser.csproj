@@ -17,6 +17,7 @@
     <PackageReleaseNotes>See Changelog:
 https://github.com/eramella/QFXparser/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
 </Project>
