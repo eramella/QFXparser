@@ -15,5 +15,8 @@ namespace QFXparser
 
         [NodeName("LEDGERBAL")]
         public RawLedgerBalance LedgerBalance { get; set; } = new RawLedgerBalance();
+
+        //[NodeName("AVAILBAL")] 
+        //public RawAvailableBalance AvailableBalance { get; set; } = new RawAvailableBalance();
     }
 }

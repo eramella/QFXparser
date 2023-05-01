@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Company>emaquest.net</Company>
     <Product>QFXparser</Product>
     <PackageId>QFXparser</PackageId>
@@ -17,6 +17,8 @@
     <PackageReleaseNotes>See Changelog:
 https://github.com/eramella/QFXparser/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\Visual Studio\Repos\QFXparser\QFXparser.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
 </Project>
